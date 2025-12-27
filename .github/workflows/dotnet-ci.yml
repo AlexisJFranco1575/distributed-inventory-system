@@ -15,10 +15,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    # 1. Descargar código
+    # 1. Descarga código
     - uses: actions/checkout@v4
 
-    # 2. Instala .NET 8 en máquina virtual
+    # 2. Instala .NET 8
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
@@ -26,12 +26,12 @@ jobs:
 
     # 3. Restaura librerías
     - name: Restore dependencies
-      run: dotnet restore backend/DistributedInventory.sln
+      run: dotnet restore DistributedInventory.sln
 
-    # 4. Compila el código 
+    # 4. Compila el código
     - name: Build
-      run: dotnet build backend/DistributedInventory.sln --no-restore
+      run: dotnet build DistributedInventory.sln --no-restore
 
     # 5. Ejecuta los Tests
     - name: Test
-      run: dotnet test backend/ProductService.Tests/ProductService.Tests.csproj --no-build --verbosity normal
+      run: dotnet test DistributedInventory.sln --no-build --verbosity normal
