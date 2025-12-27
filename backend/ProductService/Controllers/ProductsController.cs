@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using ProductService.Data;
 using ProductService.Models;
+using ProductService.Repositories;
 
 namespace ProductService.controllers
 {
@@ -9,31 +8,27 @@ namespace ProductService.controllers
     [Route("api/[controller]")]
     public class ProductsController : ControllerBase
     {
-        private readonly AppDbContext _context;
+        private readonly IProductRepository _repository;
 
-        public ProductsController(AppDbContext context)
+        public ProductsController(IProductRepository repository)
         {
-            _context = context;
+            _repository = repository;
         }
 
         // Get: api/products
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Product>>> GetProducts()
         {
-            return await _context.Products.ToListAsync();
+            var products = await _repository.GetAllAsync();
+            return Ok(products);
         }
 
         // Post: api/products
         [HttpPost]
         public async Task<ActionResult<Product>> CreateProduct(Product product)
         {
-            //Add the product to the memory context
-            _context.Products.Add(product);
-
-            //Save the changes to the DataBase
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction(nameof(GetProducts), new { id = product.Id }, product);
+            await _repository.CreateAsync(product);
+            return StatusCode(201, product);
         }
     }
 }

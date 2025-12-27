@@ -1,0 +1,37 @@
+name: .NET Backend CI
+
+on:
+  push:
+    branches: [ "main" ]
+    paths:
+      - 'backend/**'
+  pull_request:
+    branches: [ "main" ]
+    paths:
+      - 'backend/**'
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+    # 1. Descargar código
+    - uses: actions/checkout@v4
+
+    # 2. Instala .NET 8 en máquina virtual
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 8.0.x
+
+    # 3. Restaura librerías
+    - name: Restore dependencies
+      run: dotnet restore backend/DistributedInventory.sln
+
+    # 4. Compila el código 
+    - name: Build
+      run: dotnet build backend/DistributedInventory.sln --no-restore
+
+    # 5. Ejecuta los Tests
+    - name: Test
+      run: dotnet test backend/ProductService.Tests/ProductService.Tests.csproj --no-build --verbosity normal

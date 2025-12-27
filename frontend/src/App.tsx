@@ -14,13 +14,13 @@ interface Product {
 
 function App() {
   const [products, setProducts] = useState<Product[]>([]);
-  const { isOpen, onOpen, onClose } = useDisclosure(); // Controla la ventana modal
-  const toast = useToast(); // Para notificaciones bonitas
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const toast = useToast();
 
-  // Estado para el nuevo producto
+  // Product state
   const [newProduct, setNewProduct] = useState({ name: '', price: '', stock: '' });
 
-  // 1. Cargar productos (READ)
+  // 1. Load products (READ)
   const fetchProducts = () => {
     fetch('http://localhost:5004/api/products')
       .then(res => res.json())
@@ -32,7 +32,7 @@ function App() {
     fetchProducts();
   }, []);
 
-  // 2. Guardar producto (CREATE)
+  // 2. Save product (CREATE)
   const handleSave = () => {
     const productToSend = {
       name: newProduct.name,
@@ -47,10 +47,10 @@ function App() {
     })
     .then(res => {
       if (res.ok) {
-        toast({ title: 'Producto creado.', status: 'success', duration: 3000, isClosable: true });
-        fetchProducts(); // Recargar la lista
-        onClose(); // Cerrar modal
-        setNewProduct({ name: '', price: '', stock: '' }); // Limpiar formulario
+        toast({ title: 'Product created.', status: 'success', duration: 3000, isClosable: true });
+        fetchProducts(); // Reload List
+        onClose(); // Close modal
+        setNewProduct({ name: '', price: '', stock: '' }); // Clear form
       }
     });
   };
@@ -59,8 +59,8 @@ function App() {
     <ChakraProvider>
       <Container maxW="container.xl" py={10}>
         <Box display="flex" justifyContent="space-between" alignItems="center" mb={10}>
-          <Heading color="teal.500">📦 Inventario Distribuido</Heading>
-          <Button colorScheme="teal" onClick={onOpen}>+ Agregar Producto</Button>
+          <Heading color="teal.500">📦 Distributed Inventory</Heading>
+          <Button colorScheme="teal" onClick={onOpen}>+ Add Product</Button>
         </Box>
         
         <SimpleGrid columns={[1, 2, 3]} spacing={10}>
@@ -76,31 +76,31 @@ function App() {
           ))}
         </SimpleGrid>
 
-        {/* Ventana Modal para crear producto */}
+        {/* Modal window to create product */}
         <Modal isOpen={isOpen} onClose={onClose}>
           <ModalOverlay />
           <ModalContent>
-            <ModalHeader>Nuevo Producto</ModalHeader>
+            <ModalHeader>New Product</ModalHeader>
             <ModalCloseButton />
             <ModalBody>
               <VStack spacing={4}>
-                <Input placeholder="Nombre del producto" 
+                <Input placeholder="Product Name" 
                   value={newProduct.name} 
                   onChange={(e) => setNewProduct({...newProduct, name: e.target.value})} 
                 />
-                <Input placeholder="Precio" type="number" 
+                <Input placeholder="Price" type="number" 
                   value={newProduct.price} 
                   onChange={(e) => setNewProduct({...newProduct, price: e.target.value})} 
                 />
-                <Input placeholder="Stock Inicial" type="number" 
+                <Input placeholder="Initial Stock" type="number" 
                   value={newProduct.stock} 
                   onChange={(e) => setNewProduct({...newProduct, stock: e.target.value})} 
                 />
               </VStack>
             </ModalBody>
             <ModalFooter>
-              <Button colorScheme="blue" mr={3} onClick={handleSave}>Guardar</Button>
-              <Button variant="ghost" onClick={onClose}>Cancelar</Button>
+              <Button colorScheme="blue" mr={3} onClick={handleSave}>Save</Button>
+              <Button variant="ghost" onClick={onClose}>Cancel</Button>
             </ModalFooter>
           </ModalContent>
         </Modal>
