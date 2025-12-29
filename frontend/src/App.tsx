@@ -22,7 +22,7 @@ function App() {
 
   // 1. Load products (READ)
   const fetchProducts = () => {
-    fetch('http://localhost:5004/api/products')
+    fetch('http://localhost:8080/api/products')
       .then(res => res.json())
       .then(data => setProducts(data))
       .catch(err => console.error(err));
@@ -40,7 +40,7 @@ function App() {
       stock: parseInt(newProduct.stock)
     };
 
-    fetch('http://localhost:5004/api/products', {
+    fetch('http://localhost:8080/api/products', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(productToSend)

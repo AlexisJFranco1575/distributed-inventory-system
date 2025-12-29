@@ -1,0 +1,32 @@
+version: '3.4'
+
+services:
+  db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: sql_server_container
+    environment:
+      - ACCEPT_EULA=Y
+      # CONTRASEÑA FUERTE OBLIGATORIA (Cópiala tal cual)
+      - MSSQL_SA_PASSWORD=Password_Fuerte_123!
+    ports:
+      # Usamos el puerto 1435 para que no choque con el de tu Windows
+      - "1435:1433"
+    volumes:
+      - sqlvolume:/var/opt/mssql
+
+  backend:
+    image: inventory-api
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: inventory_api_container
+    ports:
+      - "8080:8080"
+    environment:
+      # La conexión apunta al servicio "db", puerto interno 1433 (dentro de Docker)
+      - ConnectionStrings__DefaultConnection=Server=db;Database=InventoryProdDb;User Id=sa;Password=Password_Fuerte_123!;TrustServerCertificate=True;
+    depends_on:
+      - db
+
+volumes:
+  sqlvolume:
