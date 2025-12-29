@@ -7,16 +7,16 @@ Sistema de inventario distribuido desarrollado en .NET 8.
 
 ```mermaid
 graph TD
-    Client[👤 User / Browser] -->|HTTP Request| Frontend[⚛️ React Frontend (Vite)]
+    Client["👤 User / Browser"] -->|HTTP Request| Frontend["⚛️ React Frontend (Vite)"]
     
     subgraph "Docker Host (Your PC)"
-        Frontend -->|Fetch API :8080| Backend[⚙️ .NET 8 API Container]
-        Backend -->|SQL Protocol :1433| Database[(🗄️ SQL Server Container)]
+        Frontend -->|"Fetch API :8080"| Backend["⚙️ .NET 8 API Container"]
+        Backend -->|"SQL Protocol :1433"| Database[("🗄️ SQL Server Container")]
     end
 
     subgraph "CI/CD Pipeline"
-        GitHub[🐙 GitHub Repo] -->|Push| Actions[🚀 GitHub Actions]
-        Actions -->|Build & Test| Backend
+        GitHub["🐙 GitHub Repo"] -->|Push| Actions["🚀 GitHub Actions"]
+        Actions -->|"Build & Test"| Backend
     end
 
     style Frontend fill:#61dafb,stroke:#333,stroke-width:2px,color:black
